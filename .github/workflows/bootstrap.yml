@@ -28,15 +28,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [ -f .bootstrap/archive.zip ]; then
-            cp .bootstrap/archive.zip /tmp/novaafia.zip
-          else
-            cat .bootstrap/part-* > .bootstrap/archive.b64
-            base64 --decode .bootstrap/archive.b64 > /tmp/novaafia.zip
-          fi
-          echo "ee96926fe6ac7ded12922bf2c791c87e6ce11b5397fe0aaafbfefbc134ce65b5  /tmp/novaafia.zip" | sha256sum -c -
-          unzip -t /tmp/novaafia.zip
-          unzip -o /tmp/novaafia.zip -d .
+          cat .bootstrap/part-* > .bootstrap/archive.b64
+          base64 --decode .bootstrap/archive.b64 > /tmp/novaafia.tar.xz
+          echo "9b59f1989462f1a7ef887e52232b3771016834c5d249aa3fe48fbefd60f42ee7  /tmp/novaafia.tar.xz" | sha256sum -c -
+          tar -tJf /tmp/novaafia.tar.xz >/dev/null
+          tar -xJf /tmp/novaafia.tar.xz -C .
           rm -rf .bootstrap
           rm -f .github/workflows/bootstrap.yml
 
